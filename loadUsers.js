@@ -1,4 +1,4 @@
-module.exports = function(_, request, async){
+module.exports = function(_, request, async, fs){
 
     function get(url, callback){
         request(url, function (err, data, body) {
@@ -31,6 +31,8 @@ module.exports = function(_, request, async){
         currentUsers: []
     };
 
+    var emptyAvatar = fs.readFileSync('emptyAvatar.jpg');
+
     function updateUsers(callback){
         get('http://codeforces.com/api/contest.list?gym=false', function(err, data){
             if(err){
@@ -50,19 +52,37 @@ module.exports = function(_, request, async){
                     })
                 }, function(err, results){
                     var handles = _.unique(_.flatten(results));
-                    //console.log(handles)
-
-                    get('http://codeforces.com/api/user.info?handles='+handles.join(';'), function(err, users){
-                        if(err){
-                            callback(err);
-                        } else {
-                            var users = _.chain(users).map(function(user){
-                                user = _.pick(user, ['rating', 'handle']);
-                                user.url = 'http://codeforces.com/userphoto/title/'+user.handle+'/photo.jpg';
-                                return user;
-                            }).sortBy(function(user){return -user.rating;}).value();
-                            callback(null, users);
-                        }
+                    console.log(handles.length);
+                    var counter = 0;
+                    async.filterLimit(handles, 20, function(handle, callback){
+                        request({
+                            url: 'http://codeforces.com/userphoto/title/'+handle+'/photo.jpg',
+                            encoding: null
+                        }, function(err, response, body){
+                            counter++;
+                            console.log('parsed:', counter);
+                            if(err){
+                                console.log('ERR:', err);
+                                callback(false);
+                            } else {
+                                //console.log(body);
+                                callback(!emptyAvatar.equals(body));
+                            }
+                        })
+                    }, function(notEmptyHandles){
+                        console.log(notEmptyHandles.length);
+                        get('http://codeforces.com/api/user.info?handles='+notEmptyHandles.join(';'), function(err, users){
+                            if(err){
+                                callback(err);
+                            } else {
+                                var users = _.chain(users).map(function(user){
+                                    user = _.pick(user, ['rating', 'handle']);
+                                    user.url = 'http://codeforces.com/userphoto/title/'+user.handle+'/photo.jpg';
+                                    return user;
+                                }).sortBy(function(user){return -user.rating;}).value();
+                                callback(null, users);
+                            }
+                        });
                     });
                 });
             }

@@ -4,7 +4,8 @@ var _ = require('underscore'),
     async = require('async'),
     express = require('express'),
     bodyParser = require('body-parser'),
-    loadUsers = require('./loadUsers.js')(_, request, async);
+    fs = require('fs'),
+    loadUsers = require('./loadUsers.js')(_, request, async, fs);
 
 var app = express();
 
