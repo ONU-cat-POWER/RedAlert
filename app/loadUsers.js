@@ -23,7 +23,7 @@ window.loadUsers = function(usersCount, callback){
         if(xmlhttp.status == 200) {
             try {
                 var obj = JSON.parse(xmlhttp.responseText);
-                callback(null, obj.result);
+                callback(null, obj);
             } catch(e){
                 callback({
                     code: 2,
@@ -38,5 +38,8 @@ window.loadUsers = function(usersCount, callback){
         }
     }
 
-    get('/users/'+usersCount, callback);
+    get('/users/'+usersCount, function(err, data){
+        console.log(err, data);
+        callback(err, data);
+    });
 };
