@@ -1,9 +1,14 @@
+window.score=0;
+window.C=200;
+window.delta;
+window.tmax;
+window.t;
+window.tkill=3000;
 function generate(){
 	var res="<div class='ball'><p id='img-wrapper'><img src=\"\"></p><p id='handle'></p></div>";
 	return res;
 }
 $(document).ready(function(){
-			var time=0;
 			var audioid=0;
 			$("html").click(function(){
 				var str="<audio id='audio"+ (++audioid) +"' src='/shoot1.mp3'></audio>"
@@ -17,6 +22,8 @@ $(document).ready(function(){
 				},1200)
 			});
 			$(".ball").click(function(){
+				score+=100;
+				$("p#score").html("score: "+score)
 				$(".balls").children().each(function(){
 						var mt=Math.floor((Math.random()*95));
 						var ml=Math.floor((Math.random()*95));

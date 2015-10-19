@@ -5,6 +5,13 @@
 	-webkit-user-select: none;
 	-ms-user-select: none;
  }
+ input#count {
+	cursor: pointer;
+	width: 40px;
+ }
+ button#reset {
+	cursor: pointer;
+ }
 .area {
 	position: relative;
 	background: #fff;	

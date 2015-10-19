@@ -17,22 +17,69 @@ function getHandleDomString(handle,rating){
 	res+="</p>"
 	return res;
 }
-loadUsers(400, function(err, data){
-	if(err){
-		console.log(err);
-	} else {
-		window.users=data;
-		_.each(users, function(user, i){
-			var balls=$(".balls").append(generate());
+$("button#reset").click(function(){
+	tnow=_.now()
+	score=50
+	var count=$("input#count").val();
+	tmax=tkill*count
+	console.log(count)
+	loadUsers(count, function(err, data){
+		if(err){
+			console.log(err);
+		} else {
+			window.users=data;
+			_.each(users, function(user, i){
+				var balls=$(".balls").append(generate());
 
-			var url="url("+user.url+")"
-			var ball=$(".ball")[i];
-			$(ball).attr("id",i);
-			$(ball).find("img").attr("src",user.url)
-			var rating=user.rating	
-			$(ball).remove("p#handle")
-			$(ball).append(getHandleDomString(user.handle,rating))
-				
-		})
-	}
+				var url="url("+user.url+")"
+				var ball=$(".ball")[i];
+				$(ball).attr("id",i);
+				$(ball).find("img").attr("src",user.url)
+				var rating=user.rating	
+				$(ball).remove("p#handle")
+				$(ball).append(getHandleDomString(user.handle,rating))
+					
+			})
+			$(".balls").children().each(function(){
+				var mt=Math.floor((Math.random()*95));
+				var ml=Math.floor((Math.random()*95));
+				mt+="%";
+				ml+="%";
+				$(this).css({
+					top: mt,
+					left: ml
+				});
+				return $(this).click(function(){
+					var id=$(this).attr('id');
+					console.log(id);
+					users[id].rating-=200;
+					if(users[id].rating<1000)
+						$(this).remove();
+					else {
+						$(this).find("p#handle").remove();
+						$(this).append(getHandleDomString(users[id].handle,users[id].rating));
+							
+					}
+				});
+			});
+			$(".ball").click(function(){
+				var id=$(this).attr('id');
+				t=_.now()-tnow;
+				delta=C*(.5+.5*(Math.max(0,tmax-t)/tmax))
+				score+=delta;
+				console.log(t)
+				$(".balls").children().each(function(){
+						var mt=Math.floor((Math.random()*95));
+						var ml=Math.floor((Math.random()*95));
+						mt+="%";
+						ml+="%";
+						$(this).css({
+							top: mt,
+							left: ml
+						});
+					});
+			});
+		}
+	})
 })
+

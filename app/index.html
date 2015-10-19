@@ -7,9 +7,9 @@
 	<link rel="stylesheet" href="/style.css">
 </head>
 <body>
-	<audio id="audio" src="">
-
-	</audio>
+	<audio id="audio" src=""></audio>
+	<input type="number" id="count" placeholder=20>
+	<button id="reset">Restart</button>
 	<img class="scary"src="/scary.jpg" alt="">
 	<div class="area">
 		<div class="balls">
@@ -17,15 +17,16 @@
 		</div>
 	</div>
 	<div class="score">
+		<p id="score"></p>
 		<p id="time"></p>
 		<p id="remains"></p>
 		<p id="goal"></p>
 	</div>
 	
 	<script src="/front.js"></script>
-
 	<script src="/underscore-min.js"></script>
 	<script src="/loadUsers.js"></script>
 	<script src="/setImages.js"></script>
+	<script src="/minigun.js"></script>
 </body>
 </html>
