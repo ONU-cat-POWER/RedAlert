@@ -11,7 +11,7 @@ function generate(){
 $(document).ready(function(){
 			var audioid=0;
 			$("html").click(function(){
-				var str="<audio id='audio"+ (++audioid) +"' src='/shoot1.mp3'></audio>"
+				var str="<audio id='audio"+ (++audioid) +"' src='/assets/sounds/shoot1.mp3'></audio>"
 				$("html").append(str);
 				var shoot=document.getElementById("audio"+audioid)
 				shoot.play()
