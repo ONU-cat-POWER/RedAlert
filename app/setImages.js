@@ -18,6 +18,7 @@ function getHandleDomString(handle,rating){
 	return res;
 }
 $("button#reset").click(function(){
+	$(".balls").html("");
 	tnow=_.now()
 	score=50
 	var count=$("input#count").val();
